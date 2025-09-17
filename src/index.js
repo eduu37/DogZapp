@@ -55,7 +55,7 @@ app.get("/", (req, res) => res.send("Servidor funcionando 🚀"));
 app.use(errorHandler);
 
 // iniciar DB y socket
-await connectDB(process.env.MONGO_URI);
+await connectDB(process.env.MONGO_URL);
 initSocket(io);
 
 const PORT = process.env.PORT || 4000;
