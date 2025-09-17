@@ -20,8 +20,29 @@ const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: "*" } });
 
 // middlewares
+import cors from "cors";
+
+const allowedOrigins = [
+  "http://localhost:19006",          // Expo local
+  "http://localhost:3000",           // Si pruebas con React web local
+  "exp://127.0.0.1:19000",           // Expo Go (a veces usa este esquema)
+  process.env.API_URL // Tu backend en Railway
+];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Permitir si no hay origin (ej: app nativa) o si está en la lista
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("No permitido por CORS"));
+    }
+  },
+  credentials: true
+}));
+
+
 app.use(helmet());
-app.use(cors());
 app.use(express.json({ limit: "5mb" }));
 app.use(morgan("dev"));
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 200 }));
