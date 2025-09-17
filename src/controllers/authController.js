@@ -1,4 +1,5 @@
-import User from "../models/Usuario.js"; // tu modelo de usuario
+import Usuario from "../models/Usuario.js";
+import Comunidad from "../models/Comunidad.js"; // asegúrate de tener este modelo
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -6,32 +7,43 @@ export const register = async (req, res, next) => {
   try {
     const { nombre, email, password, codigoComunidad } = req.body;
 
-    // ✅ Verificar si ya existe
-    const existingUser = await User.findOne({ email });
+    // Verificar si el usuario ya existe
+    const existingUser = await Usuario.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "El email ya está registrado" });
     }
 
-    // ✅ Hashear la contraseña
+    // Buscar la comunidad según el código
+    const comunidad = await Comunidad.findOne({ codigo: codigoComunidad });
+    if (!comunidad) {
+      return res.status(400).json({ message: "Código de comunidad inválido" });
+    }
+
+    // Hashear la contraseña
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // ✅ Crear usuario
-    const newUser = new User({
+    // Crear usuario con comunidad asignada
+    const newUser = new Usuario({
       nombre,
       email,
       password: hashedPassword,
-      codigoComunidad,
+      comunidad: comunidad._id,
     });
 
     await newUser.save();
 
-    // ✅ Generar token JWT
-    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+    // Generar JWT
+    const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
 
-    res.status(201).json({ user: { nombre, email, codigoComunidad }, token });
+    res.status(201).json({
+      user: { nombre, email, comunidad: comunidad.nombre },
+      token,
+    });
   } catch (error) {
-    console.error(error);
-    next(error); // pasa al manejador de errores global
+    console.error("Error en register:", error);
+    next(error);
   }
 };
 
