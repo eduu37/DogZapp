@@ -19,9 +19,6 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: "*" } });
 
-// middlewares
-import cors from "cors";
-
 const allowedOrigins = [
   "http://localhost:19006",          // Expo local
   "http://localhost:3000",           // Si pruebas con React web local
