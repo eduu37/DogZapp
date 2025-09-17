@@ -42,7 +42,6 @@ export async function listarAlertas(req, res, next) {
     const alertas = await Alerta.find({ comunidad: usuario.comunidad }).sort({ fecha: -1 }).limit(100);
     res.json(alertas);
   } catch (err) {
-    logger.error("Error creando alerta", { error: err.message });
     next(err);
   }
 }
