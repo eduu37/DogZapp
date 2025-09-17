@@ -16,6 +16,7 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: "*" } });
+app.set("trust proxy", 1);
 
 const allowedOrigins = [
   "http://localhost:19006",          // Expo local
@@ -40,7 +41,7 @@ app.use(cors({
 app.use(helmet());
 app.use(express.json({ limit: "5mb" }));
 app.use(morgan("dev"));
-app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 200 }));
+app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
 
 // rutas
 app.use("/api/auth", authRoutes);
