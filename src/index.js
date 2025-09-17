@@ -6,13 +6,11 @@ import dotenv from "dotenv";
 import morgan from "morgan";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
-
-import { connectDB } from "./config/db.js";
 import authRoutes from "./routes/auth.js";
 import alertRoutes from "./routes/alertas.js";
 import { initSocket } from "./services/socket.js";
 import errorHandler from "./middlewares/errorHandler.js";
-
+import connectDB from "./config/db.js";
 dotenv.config();
 
 const app = express();

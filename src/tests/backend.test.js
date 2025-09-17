@@ -1,7 +1,7 @@
 import request from "supertest";
 import express from "express";
 import dotenv from "dotenv";
-import { connectDB } from "../config/db.js";
+import connectDB from "../config/db.js";
 import authRoutes from "../routes/auth.js";
 import alertRoutes from "../routes/alertas.js";
 
@@ -20,8 +20,8 @@ describe("Backend Alarma Comunitaria", () => {
 
   it("Debería registrar usuario", async () => {
     const res = await request(app).post("/api/auth/register").send({
-      nombre: "Tester",
-      email: "tester@example.com",
+      nombre: "devtest",
+      email: "devtester@example.com",
       password: "123456",
       codigoComunidad: "COM123"
     });

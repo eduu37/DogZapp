@@ -5,10 +5,8 @@ const connectDB = async () => {
     await mongoose.connect(process.env.MONGO_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      keepAlive: true,
       socketTimeoutMS: 45000,
-      serverSelectionTimeoutMS: 5000,
-      dbName: process.env.DB_NAME || "test", // asegúrate que coincide con tu base en Railway
+      serverSelectionTimeoutMS: 5000
     });
     console.log("✅ MongoDB conectado correctamente en Railway");
   } catch (err) {
