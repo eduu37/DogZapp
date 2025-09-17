@@ -12,7 +12,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/alertas", alertRoutes);
 
 beforeAll(async () => {
-  await connectDB(process.env.MONGO_URI);
+  await connectDB(process.env.MONGO_URL);
 });
 
 describe("Backend Alarma Comunitaria", () => {
